@@ -17,7 +17,7 @@ namespace Holiday
         {
         }
 
-        public DbSet<Holiday> Accounts { get; set; }
+        public DbSet<Holiday1> Holidays { get; set; }
 
     }
 }

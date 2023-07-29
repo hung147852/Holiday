@@ -16,44 +16,45 @@ namespace Holiday.Controllers
             _context = context;
         }
         [HttpGet]
-        public IActionResult GetHolidays() 
+        public List<Holiday1> ListHolidays() 
         { 
-            var holidays = _context.Holidays.Where(h => h.RecStatus == 'N').ToList();
-            return View(holidays);
+            var holidays1 = _context.holidays.Where(h => h.RecStatus == 'N').ToList();
+            return holidays1;
         }
-        [HttpGet("{id}")]
-        public IActionResult GetHoliday(int id)
-        {
-            var holiday = _context.Holidays.FirstOrDefault(h => h.Id == id && h.RecStatus == 'N');
-            if (holiday == null)
-            {
-                return NotFound();
-            }
+        //[HttpGet("{id}")]
+        //public IActionResult GetHoliday(int id)
+        //{
+        //    var holiday = _context.Holidays.FirstOrDefault(h => h.Id == id && h.RecStatus == 'N');
+        //    if (holiday == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(holiday);
-        }
+        //    return Ok(holiday);
+        //}
         [HttpPost]
-        public IActionResult CreateHoliday(Holiday1 holiday)
+        public Object CreateHoliday(Holiday1 holiday)
         {
-            _context.Holidays.Add(holiday);
-            _context.SaveChanges();
+            _context.holidays.Add(holiday);
+            int v = _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetHoliday), new { id = holiday.Id }, holiday);
+            return new { Messsage = "Inserted", Rows = v };
         }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteHoliday(int id)
+        [HttpDelete("{name}")]
+        public Object DeleteHoliday(string name)
         {
-            var holiday = _context.Holidays.FirstOrDefault(h => h.Id == id && h.DeletedDate == null);
+            var holiday = _context.holidays.FirstOrDefault(h => h.Name == name && h.DeletedDate == null);
             if (holiday == null)
             {
-                return NotFound();
+               return new { Messsage = "Không tìm thấy kì nghỉ lễ này" };
             }
-
+            holiday.IsDeleted = true;
             holiday.DeletedDate = DateTime.Now;
+            holiday.RecStatus = 'D';
 
             _context.SaveChanges();
 
-            return Ok(holiday);
+            return (new { message = "Kì nghỉ lễ đã được xóa." });
         }
     }
 }

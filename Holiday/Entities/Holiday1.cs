@@ -10,13 +10,15 @@ namespace Holiday.Entities
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Hldname { get; set; }
+        public string Name { get; set; }
         [Required]
         public string StartDate { get; set; }
         [Required]
         public string EndDate { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public char RecStatus { get; set; } = 'N';
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedDate { get; set; }
 
     }
 }
